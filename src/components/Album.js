@@ -5,82 +5,144 @@ class Album extends Component {
   constructor(props) {
     super(props);
     const album = albumData.find(album => {
-    return album.slug === this.props.match.params.slug;
+      return album.slug === this.props.match.params.slug;
     });
     this.state = {
-    album: album,
-    currentSong: album.songs[0],
-    currentTime: 0,
-    duration: album.songs[0].duration,
-    isPlaying: false
+      album: album,
+      currentSong: album.songs[0],
+      currentTime: 0,
+      duration: album.songs[0].duration,
+      currentVolume: 10,
+      VolumePercent: 0.08,
+      isPlaying: false
     };
     this.audioElement = document.createElement("audio");
     this.audioElement.src = album.songs[0].audioSrc;
-  }
-    componentDidMount(){
-     this.eventListeners = {
-        timeupdate: e => {
-          this.setState({ currentTime: this.audioElement.currentTime});
-         },
-         durationchange: e => {
-           this.setState({ duration: this.audioElement.duration });
-         }
-      };
-     this.audioElement.addEventListener('timeupdate', this.eventListeners.timeupdate);
-     this.audioElement.addEventListener('durationchange', this.eventListeners.durationchange);
-    }
-     componentWillUnmount() {
-     this.audioElement.src = null;
-     this.audioElement.removeEventListener('timeupdate', this.eventListeners.timeupdate);
-     this.audioElement.removeEventListener('durationchange', this.eventListeners.durationchange);
-   }
 
-    play() {
-        this.audioElement.play();
-        this.setState({ isPlaying: true });
-    }
-    pause() {
-        this.audioElement.pause();
-        this.setState({ isPlaying: false });
-    }
+    function formatTime(timeInSeconds) {
+      if (typeof timeInSeconds === "number") {
+        const minutes = Math.floor(timeInSeconds / 60).toString();
+        const seconds = Math.floor(timeInSeconds % 60).toString();
 
-
-    setSong(song) {
-        this.audioElement.src = song.audioSrc;
-        this.setState({ currentSong: song});
-    }
-
-    handleSongClick(song) {
-        const isSameSong = this.state.currentSong === song;
-        if (this.state.isPlaying && isSameSong) {
-            this.pause();
-        }else{
-            if(!isSameSong) {this.setSong(song); }
-            this.play();
+        if (seconds < 10) {
+          return minutes + ":0" + seconds;
+        } else {
+          return minutes + ":" + seconds;
         }
+      }
     }
-    handlePrevClick() {
-        const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
-        const newIndex = Math.max(0, currentIndex - 1);
-        const newSong = this.state.album.songs[newIndex];
-        this.setSong(newSong);
-        this.play();
+  }
+  componentDidMount() {
+    this.eventListeners = {
+      timeupdate: e => {
+        this.setState({ currentTime: this.audioElement.currentTime });
+      },
+      durationchange: e => {
+        this.setState({ duration: this.audioElement.duration });
+      },
+      volumechange: e => {
+        this.setState({ currentVolume: this.audioElement.volume });
+      }
+    };
+    this.audioElement.addEventListener(
+      "timeupdate",
+      this.eventListeners.timeupdate
+    );
+    this.audioElement.addEventListener(
+      "durationchange",
+      this.eventListeners.durationchange
+    );
+    this.audioElement.addEventListener(
+      "volumechange",
+      this.eventListeners.volumechange
+    );
+  }
+  componentWillUnmount() {
+    this.audioElement.src = null;
+    this.audioElement.removeEventListener(
+      "timeupdate",
+      this.eventListeners.timeupdate
+    );
+    this.audioElement.removeEventListener(
+      "durationchange",
+      this.eventListeners.durationchange
+    );
+    this.audioElement.removeEventListener(
+      "volumechange",
+      this.eventListeners.volumechange
+    );
+  }
+
+  play() {
+    this.audioElement.play();
+    this.setState({ isPlaying: true });
+  }
+  pause() {
+    this.audioElement.pause();
+    this.setState({ isPlaying: false });
+  }
+
+  setSong(song) {
+    this.audioElement.src = song.audioSrc;
+    this.setState({ currentSong: song });
+  }
+
+  handleSongClick(song) {
+    const isSameSong = this.state.currentSong === song;
+    if (this.state.isPlaying && isSameSong) {
+      this.pause();
+    } else {
+      if (!isSameSong) {
+        this.setSong(song);
+      }
+      this.play();
     }
-    handleNextClick(){
-        const currentIndex = this.state.album.songs.findIndex(song => this.state.currentSong === song);
-        const newIndex = Math.max(0, currentIndex + 1);
-        const newSong = this.state.album.songs[newIndex];
-        this.setSong(newSong);
-        this.play();
+  }
+  handlePrevClick() {
+    const currentIndex = this.state.album.songs.findIndex(
+      song => this.state.currentSong === song
+    );
+    const newIndex = Math.max(0, currentIndex - 1);
+    const newSong = this.state.album.songs[newIndex];
+    this.setSong(newSong);
+    this.play();
+  }
+  handleNextClick() {
+    const currentIndex = this.state.album.songs.findIndex(
+      song => this.state.currentSong === song
+    );
+    const newIndex = Math.max(0, currentIndex + 1);
+    const newSong = this.state.album.songs[newIndex];
+    this.setSong(newSong);
+    this.play();
+  }
+  handleTimeChange(e) {
+    const newTime = this.audioElement.duration * e.target.value;
+    this.audioElement.currentTime = newTime;
+    this.setState({ currentTime: newTime });
+  }
+  handleVolumeChange(e) {
+    const newVolume = e.target.value;
+    this.audioElement.currentVolume = newVolume;
+    this.setState({ currentVolume: newVolume });
+  }
+  handleFormatTime() {
+     const timeInSeconds = this.songDuration;
+    if (typeof timeInSeconds === "number") {
+      const minutes = Math.floor(timeInSeconds / 60).toString();
+      const seconds = Math.floor(timeInSeconds % 60).toString();
+
+      if (seconds < 10) {
+        return minutes + ":0" + seconds;
+      } else {
+        return minutes + ":" + seconds;
+      }
     }
-    handleTimeChange(e){
-        const newTime = this.audioElement.duration * e.target.value;
-        this.audioElement.currentTime = newTime;
-        this.setState({ currentTime: newTime});
-    }
- 
+  }
+
   render() {
-    return <section className="album">
+    return (
+      <section className="album">
         <section id="album-info">
           <img id="album-cover-art" src={this.state.album.albumCover} />
           <div className="album-details">
@@ -97,7 +159,11 @@ class Album extends Component {
           </colgroup>
           <tbody>
             {this.state.album.songs.map((song, index) => (
-              <tr className="song"key={index} onClick={() => this.handleSongClick(song)} >
+              <tr
+                className="song"
+                key={index}
+                onClick={() => this.handleSongClick(song)}
+              >
                 <td className="song-actions">
                   <button>
                     <span className="song-number ">{index + 1}</span>
@@ -111,17 +177,22 @@ class Album extends Component {
             ))}
           </tbody>
         </table>
-        <PlayerBar 
-          isPlaying={ this.state.isPlaying} 
+        <PlayerBar
+          isPlaying={this.state.isPlaying}
           currentSong={this.state.currentSong}
           currentTime={this.audioElement.currentTime}
           duration={this.audioElement.duration}
+          currentVolume={this.state.currentVolume}
+          volumePercent={this.state.VolumePercent}
           handleSongClick={() => this.handleSongClick(this.state.currentSong)}
           handlePrevClick={() => this.handlePrevClick()}
           handleNextClick={() => this.handleNextClick()}
-          handleTimeChange={(e) => this.handleTimeChange(e)}
-          />
-      </section>;
+          handleTimeChange={e => this.handleTimeChange(e)}
+          handleVolumeChange={e => this.handleVolumeChange(e)}
+          handleFormatTime= {e => this.handleFormatTime(e)}
+        />
+      </section>
+    );
   }
 }
     
