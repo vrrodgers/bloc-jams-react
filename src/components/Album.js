@@ -126,11 +126,11 @@ class Album extends Component {
     this.audioElement.currentVolume = newVolume;
     this.setState({ currentVolume: newVolume });
   }
-  handleFormatTime() {
-     const timeInSeconds = this.songDuration;
-    if (typeof timeInSeconds === "number") {
-      const minutes = Math.floor(timeInSeconds / 60).toString();
-      const seconds = Math.floor(timeInSeconds % 60).toString();
+  handleFormatTime(time) {
+     
+    if (typeof time === "number") {
+      const minutes = Math.floor(time / 60).toString();
+      const seconds = Math.floor(time % 60).toString();
 
       if (seconds < 10) {
         return minutes + ":0" + seconds;
@@ -172,7 +172,7 @@ class Album extends Component {
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>
-                <td className="song-duration">{song.duration}seconds</td>
+                <td className="song-duration">{this.handleFormatTime(song.duration)}seconds</td>
               </tr>
             ))}
           </tbody>
