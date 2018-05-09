@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
 import PlayerBar from './PlayerBar';
+import * as ReactBootstrap from "react-bootstrap";
+
 class Album extends Component {
   constructor(props) {
     super(props);
@@ -12,13 +14,10 @@ class Album extends Component {
       currentSong: album.songs[0],
       currentTime: 0,
       duration: album.songs[0].duration,
-      currentVolume: 10,
+      currentVolume: 1,
       VolumePercent: 0.08,
       isPlaying: false
     };
-    this.audioElement = document.createElement("audio");
-    this.audioElement.src = album.songs[0].audioSrc;
-
     function formatTime(timeInSeconds) {
       if (typeof timeInSeconds === "number") {
         const minutes = Math.floor(timeInSeconds / 60).toString();
@@ -31,7 +30,12 @@ class Album extends Component {
         }
       }
     }
+
+    this.audioElement = document.createElement("audio");
+    this.audioElement.src = album.songs[0].audioSrc;
+    this.audioElement.volume = this.state.currentVolume;
   }
+
   componentDidMount() {
     this.eventListeners = {
       timeupdate: e => {
@@ -127,7 +131,6 @@ class Album extends Component {
     this.setState({ currentVolume: newVolume });
   }
   handleFormatTime(time) {
-     
     if (typeof time === "number") {
       const minutes = Math.floor(time / 60).toString();
       const seconds = Math.floor(time % 60).toString();
@@ -140,23 +143,50 @@ class Album extends Component {
     }
   }
 
+  formatTime(time) {
+    if (isNaN(time)) {
+      return "-:--";
+    } else {
+      let minutes = Math.floor(time / 60);
+        let seconds = Math.floor(time % 60);
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      let formattedTime = String(minutes) + ":" + String(seconds);
+      return formattedTime;
+    }
+  }
+
   render() {
     return (
       <section className="album">
         <section id="album-info">
-          <img id="album-cover-art" src={this.state.album.albumCover} />
-          <div className="album-details">
-            <h1 id="album-title">{this.state.album.title}</h1>
-            <h2 className="artist">{this.state.album.artist}</h2>
-            <div id="release-info">{this.state.album.releaseInfo}</div>
-          </div>
+          <ReactBootstrap.Grid>
+            <ReactBootstrap.Row>
+              <ReactBootstrap.Col md={4}>
+                <img id="album-cover-art" src={this.state.album.albumCover} />
+              </ReactBootstrap.Col>
+              <ReactBootstrap.Col md={2} />
+              <ReactBootstrap.Col md={4}>
+                <div className="album-details">
+                  <h1 id="album-title">{this.state.album.title}</h1>
+                  <h2 className="artist">{this.state.album.artist}</h2>
+                  <div id="release-info">{this.state.album.releaseInfo}</div>
+                </div>
+              </ReactBootstrap.Col>
+              <ReactBootstrap.Col md={2} />
+            </ReactBootstrap.Row>
+          </ReactBootstrap.Grid>
         </section>
-        <table id="song-list">
-          <colgroup>
-            <col id="song-number-column" />
-            <col id="song-title-column" />
-            <col id="song-duration-column" />
-          </colgroup>
+        <ReactBootstrap.Table responsive table id="song-list">
+          <thead>
+            <tr>
+              <th id="song-number-column" />
+              <th id="song-title-column" />
+              <th id="song-title-column" />
+              <th id="song-duration-column" />
+            </tr>
+          </thead>
           <tbody>
             {this.state.album.songs.map((song, index) => (
               <tr
@@ -172,11 +202,14 @@ class Album extends Component {
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>
-                <td className="song-duration">{this.handleFormatTime(song.duration)}seconds</td>
+                <td className="song-duration">
+                  {this.formatTime(song.duration)} 
+                </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </ReactBootstrap.Table>
+
         <PlayerBar
           isPlaying={this.state.isPlaying}
           currentSong={this.state.currentSong}
@@ -189,7 +222,7 @@ class Album extends Component {
           handleNextClick={() => this.handleNextClick()}
           handleTimeChange={e => this.handleTimeChange(e)}
           handleVolumeChange={e => this.handleVolumeChange(e)}
-          handleFormatTime= {e => this.handleFormatTime(e)}
+          handleFormatTime={e => this.handleFormatTime(e)}
         />
       </section>
     );

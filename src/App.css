@@ -21,6 +21,32 @@
 .App-intro {
   font-size: large;
 }
+.ion-music-note{
+  font-size: 90px;
+}
+
+ .ion-radio-waves {
+   font-size: 90px; 
+ }
+.ion-iphone{
+   font-size: 90px;
+}
+
+
+
+jumbotron {
+  background-image: url("/images/club.png");
+  background-color: #17234E;
+  margin-bottom: 0;
+  min-height: 10%;
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+
+
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

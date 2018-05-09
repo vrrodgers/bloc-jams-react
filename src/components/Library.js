@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import albumData from './../data/albums';
+import * as ReactBootstrap from "react-bootstrap";
 
 class Library extends Component {
     constructor(props) {
@@ -9,18 +10,24 @@ class Library extends Component {
     }
     render() {
         return(
-            <section className='Library'>
-              {
-                this.state.albums.map( ( album, index) =>
-                    <Link to={`/album/${album.slug}`} key={index} >
-                      <img src ={album.albumCover} alt= {album.title} />
-                      <div>{album.title}</div>
-                      <div>{album.artist}</div>
-                      <div>{album.songs.length} songs</div>
-                    </Link>
-                )
-              }
-            </section>
+            <ReactBootstrap.Grid>
+                <section className='Library'>
+                    <ReactBootstrap.Row>
+                        { 
+                            this.state.albums.map( ( album, index) =>
+                                <ReactBootstrap.Col md={6}>
+                                    <Link to={`/album/${album.slug}`} key={index} >
+                                    <ReactBootstrap.Thumbnail src ={album.albumCover} alt= {album.title} />
+                                    <h3>{album.title}</h3>
+                                    <p>{album.artist}</p>
+                                    <p>{album.songs.length} songs</p>
+                                    </Link>
+                                </ReactBootstrap.Col>
+                            )
+                        }
+                    </ReactBootstrap.Row>
+                </section>
+            </ReactBootstrap.Grid>
         );
     }
 }
