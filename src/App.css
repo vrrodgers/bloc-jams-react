@@ -1,3 +1,5 @@
+
+
 .App {
   text-align: center;
 }
@@ -31,21 +33,19 @@
 .ion-iphone{
    font-size: 90px;
 }
-
-
-
-jumbotron {
-  background-image: url("/images/club.png");
-  background-color: #17234E;
-  margin-bottom: 0;
-  min-height: 10%;
-  background-repeat: no-repeat;
-  background-position: center;
-  -webkit-background-size: cover;
-  background-size: cover;
+/* Library */
+.pic{
+  margin-top: 50px;
+}
+h3{
+  margin-top: 40px;
 }
 
-
+/* App */
+.navbar-brand{
+  font-size: 50px;
+}
+/* playerbar */
 
 
 @keyframes App-logo-spin {

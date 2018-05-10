@@ -2,16 +2,23 @@ import React from 'react';
 import * as ReactBootstrap from "react-bootstrap";
 //import { Jumbotron } from 'react-bootstrap';
 //import { Button } from 'react-bootstrap';
+import imgUrl from './club.png';
 
 
 
-
-
+var divStyle = {
+  backgroundPosition: 'center',
+  backgroundSize: ' auto',
+  webkitBackgroundSize: 'cover',
+   height: '350px',
+  backgroundImage: 'url(' + imgUrl + ')',
+  marginTop: '60px'
+};
 
 const Landing = () => (
   <section className="landing">
-    <ReactBootstrap.Jumbotron>
-      <img src="assets/images/club.png" />
+    <ReactBootstrap.Jumbotron style={divStyle}>
+      
     </ReactBootstrap.Jumbotron>
 
     <ReactBootstrap.Grid>

@@ -197,8 +197,7 @@ class Album extends Component {
                 <td className="song-actions">
                   <button>
                     <span className="song-number ">{index + 1}</span>
-                    <span className="ion-play" />
-                    <span className="ion-pause" />
+                    
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>

@@ -15,7 +15,7 @@ class Library extends Component {
                     <ReactBootstrap.Row>
                         { 
                             this.state.albums.map( ( album, index) =>
-                                <ReactBootstrap.Col md={6}>
+                                <ReactBootstrap.Col md={6} className="pic">
                                     <Link to={`/album/${album.slug}`} key={index} >
                                     <ReactBootstrap.Thumbnail src ={album.albumCover} alt= {album.title} />
                                     <h3>{album.title}</h3>
