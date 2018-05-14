@@ -2,21 +2,19 @@ import React, { Component } from 'react';
 import albumData from './../data/albums';
 import PlayerBar from './PlayerBar';
 import * as ReactBootstrap from "react-bootstrap";
+import  '../App.css';
 
 
-var hoverStyle= {
-   display: 'none',
-}
-var hover1Style= {
-  display: 'inline',
-}
 
-var onHover ={
-
+/* var onHoverStyle ={
+  display: 'ion-play', 
 }
 var offHover = {
-
+  display: 'ion-pause', 
 }
+ */
+
+
 
 class Album extends Component {
   constructor(props) {
@@ -36,6 +34,8 @@ class Album extends Component {
 
 
     };
+
+    
     function formatTime(timeInSeconds) {
       if (typeof timeInSeconds === "number") {
         const minutes = Math.floor(timeInSeconds / 60).toString();
@@ -177,6 +177,12 @@ class Album extends Component {
     }
   }
 
+  handleHover(){
+    this.setState({
+        isHovered: !this.state.isHovered
+    });
+}
+
   formatTime(time) {
     if (isNaN(time)) {
       return "-:--";
@@ -190,15 +196,15 @@ class Album extends Component {
       return formattedTime;
     }
   }
-   
-    
 
-
-
-
- 
+  handleHover(){
+    this.setState({
+        isHovered: !this.state.isHovered
+    });
+ }
 
   render() {
+    const btnClass = this.state.isHovered ? "ion-play" : "";
     return (
       <section className="album">
         <section id="album-info">
@@ -242,29 +248,16 @@ class Album extends Component {
                 <td className="song-actions">
                 {/* //If isHovered is false or hoveredIndex is not index */}
                     {/* //Show song number */}
-                  <button 
-                   
-                      if ( :hover == false  : hoveredIndex != {index}) {
-                            ("index + 1");
-                    }
-                  />
+                  <button className={btnClass} onMouseEnter={this.handleHover.bind(this)} onMouseLeave={this.handleHover.bind(this)}>
                     
-
-                    <span className="song-number ">{index + 1}</span>
-                      if( isHovered && hoveredIndex === {index}){
-                        if(isPlaying){
-                          'ion-pause'
-                        }else{
-                          
-                        }
-                      }
-
-                    /{/* /If isHovered is true and hoveredIndex is index
-                      //If isPlaying
-                        //Show pause button
-                      // else
-                        //Show play button */}
-                
+                    <span className="song-number" >{index + 1}</span>
+          
+                       {/*  /* If isHovered is true and hoveredIndex is index
+                          If isPlaying
+                          Show pause button
+                          else
+                        Show play button   */}
+                      
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>

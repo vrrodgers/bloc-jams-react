@@ -7,6 +7,8 @@ var playerBarStyle = {
 };
 
 
+
+
 class PlayerBar extends Component {
     render() {
         return(

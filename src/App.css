@@ -47,14 +47,9 @@ h3{
 }
 /* playerbar */
 
-.button1:hover {
-  :hover .ion-play 
+.song-number:hover{
+  visibility: hidden;
 }
-
-.button1:hover {
-  :hover .ion-play; 
-}
-
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
