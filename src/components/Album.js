@@ -3,6 +3,21 @@ import albumData from './../data/albums';
 import PlayerBar from './PlayerBar';
 import * as ReactBootstrap from "react-bootstrap";
 
+
+var hoverStyle= {
+   display: 'none',
+}
+var hover1Style= {
+  display: 'inline',
+}
+
+var onHover ={
+
+}
+var offHover = {
+
+}
+
 class Album extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +31,10 @@ class Album extends Component {
       duration: album.songs[0].duration,
       currentVolume: 1,
       VolumePercent: 0.08,
-      isPlaying: false
+      isPlaying: false,
+      isHovered: false
+
+
     };
     function formatTime(timeInSeconds) {
       if (typeof timeInSeconds === "number") {
@@ -34,6 +52,8 @@ class Album extends Component {
     this.audioElement = document.createElement("audio");
     this.audioElement.src = album.songs[0].audioSrc;
     this.audioElement.volume = this.state.currentVolume;
+    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   componentDidMount() {
@@ -89,6 +109,20 @@ class Album extends Component {
   setSong(song) {
     this.audioElement.src = song.audioSrc;
     this.setState({ currentSong: song });
+  }
+
+  onMouseOver(index){
+   
+    this.setState(  {
+      isHovering: true,
+      hoveredIndex: index
+    });
+  }
+
+  onMouseLeave() {
+    this.setState({
+      isHovering: false
+    });
   }
 
   handleSongClick(song) {
@@ -156,6 +190,13 @@ class Album extends Component {
       return formattedTime;
     }
   }
+   
+    
+
+
+
+
+ 
 
   render() {
     return (
@@ -180,7 +221,7 @@ class Album extends Component {
         </section>
         <ReactBootstrap.Table responsive table id="song-list">
           <thead>
-            <tr>
+            <tr >
               <th id="song-number-column" />
               <th id="song-title-column" />
               <th id="song-title-column" />
@@ -190,14 +231,40 @@ class Album extends Component {
           <tbody>
             {this.state.album.songs.map((song, index) => (
               <tr
-                className="song"
+                className="song" 
                 key={index}
                 onClick={() => this.handleSongClick(song)}
-              >
+                 onMouseOver={() => this.onMouseOver(index+1)}
+                  onMouseLeave={() => this.onMouseLeave()}
+                  >
+               
+            
                 <td className="song-actions">
-                  <button>
-                    <span className="song-number ">{index + 1}</span>
+                {/* //If isHovered is false or hoveredIndex is not index */}
+                    {/* //Show song number */}
+                  <button 
+                   
+                      if ( :hover == false  : hoveredIndex != {index}) {
+                            ("index + 1");
+                    }
+                  />
                     
+
+                    <span className="song-number ">{index + 1}</span>
+                      if( isHovered && hoveredIndex === {index}){
+                        if(isPlaying){
+                          'ion-pause'
+                        }else{
+                          
+                        }
+                      }
+
+                    /{/* /If isHovered is true and hoveredIndex is index
+                      //If isPlaying
+                        //Show pause button
+                      // else
+                        //Show play button */}
+                
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>
@@ -208,6 +275,15 @@ class Album extends Component {
             ))}
           </tbody>
         </ReactBootstrap.Table>
+
+
+        
+
+
+
+
+
+
 
         <PlayerBar
           isPlaying={this.state.isPlaying}

@@ -7,7 +7,6 @@ var playerBarStyle = {
 };
 
 
-
 class PlayerBar extends Component {
     render() {
         return(
@@ -25,7 +24,8 @@ class PlayerBar extends Component {
                       <span className="ion-skip-forward"></span>
                     </button>
                   </ReactBootstrap.Col>
-                  <ReactBootstrap.Col xs={9} md={6} id="time-control" style={playerBarStyle}>
+                  <ReactBootstrap.Col xs={9} md={6} id="time-control" style={playerBarStyle}  >
+                         
                     <input 
                     type="range" 
                     className="seek-bar" 
