@@ -4,18 +4,6 @@ import PlayerBar from './PlayerBar';
 import * as ReactBootstrap from "react-bootstrap";
 import  '../App.css';
 
-
-
-/* var onHoverStyle ={
-  display: 'ion-play', 
-}
-var offHover = {
-  display: 'ion-pause', 
-}
- */
-
-
-
 class Album extends Component {
   constructor(props) {
     super(props);
@@ -31,11 +19,8 @@ class Album extends Component {
       VolumePercent: 0.08,
       isPlaying: false,
       isHovered: false
-
-
     };
 
-    
     function formatTime(timeInSeconds) {
       if (typeof timeInSeconds === "number") {
         const minutes = Math.floor(timeInSeconds / 60).toString();
@@ -111,9 +96,8 @@ class Album extends Component {
     this.setState({ currentSong: song });
   }
 
-  onMouseOver(index){
-   
-    this.setState(  {
+  onMouseOver(index) {
+    this.setState({
       isHovering: true,
       hoveredIndex: index
     });
@@ -177,18 +161,19 @@ class Album extends Component {
     }
   }
 
-  handleHover(){
+  handleHover(index) {
     this.setState({
-        isHovered: !this.state.isHovered
+      isHovered: !this.state.isHovered,
+      hoveredIndex: index
     });
-}
+  }
 
   formatTime(time) {
     if (isNaN(time)) {
       return "-:--";
     } else {
       let minutes = Math.floor(time / 60);
-        let seconds = Math.floor(time % 60);
+      let seconds = Math.floor(time % 60);
       if (seconds < 10) {
         seconds = "0" + seconds;
       }
@@ -197,16 +182,10 @@ class Album extends Component {
     }
   }
 
-  handleHover(){
-    this.setState({
-        isHovered: !this.state.isHovered
-    });
- }
-
   render() {
     const btnClass = this.state.isHovered ? "ion-play" : "";
-    return (
-      <section className="album">
+
+    return <section className="album">
         <section id="album-info">
           <ReactBootstrap.Grid>
             <ReactBootstrap.Row>
@@ -218,7 +197,9 @@ class Album extends Component {
                 <div className="album-details">
                   <h1 id="album-title">{this.state.album.title}</h1>
                   <h2 className="artist">{this.state.album.artist}</h2>
-                  <div id="release-info">{this.state.album.releaseInfo}</div>
+                  <div id="release-info">
+                    {this.state.album.releaseInfo}
+                  </div>
                 </div>
               </ReactBootstrap.Col>
               <ReactBootstrap.Col md={2} />
@@ -227,7 +208,7 @@ class Album extends Component {
         </section>
         <ReactBootstrap.Table responsive table id="song-list">
           <thead>
-            <tr >
+            <tr>
               <th id="song-number-column" />
               <th id="song-title-column" />
               <th id="song-title-column" />
@@ -237,63 +218,34 @@ class Album extends Component {
           <tbody>
             {this.state.album.songs.map((song, index) => (
               <tr
-                className="song" 
+                className="song"
                 key={index}
                 onClick={() => this.handleSongClick(song)}
-                 onMouseOver={() => this.onMouseOver(index+1)}
-                  onMouseLeave={() => this.onMouseLeave()}
-                  >
-               
-            
+                onMouseOver={() => this.onMouseOver(index + 1)}
+                onMouseLeave={() => this.onMouseLeave()}
+              >
                 <td className="song-actions">
-                {/* //If isHovered is false or hoveredIndex is not index */}
-                    {/* //Show song number */}
-                  <button className={btnClass} onMouseEnter={this.handleHover.bind(this)} onMouseLeave={this.handleHover.bind(this)}>
-                    
-                    <span className="song-number" >{index + 1}</span>
-          
-                       {/*  /* If isHovered is true and hoveredIndex is index
-                          If isPlaying
-                          Show pause button
-                          else
-                        Show play button   */}
-                      
+                  <button
+                    className={btnClass}
+                    key={index}
+                    onMouseOver={() => this.onMouseOver(index + 1)}
+                    onMouseEnter={this.handleHover.bind(this)}
+                    onMouseLeave={this.handleHover.bind(this)} 
+                  >
+                    <span className="song-number">{index + 1}</span>
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>
                 <td className="song-duration">
-                  {this.formatTime(song.duration)} 
+                  {this.formatTime(song.duration)}
                 </td>
               </tr>
             ))}
           </tbody>
         </ReactBootstrap.Table>
 
-
-        
-
-
-
-
-
-
-
-        <PlayerBar
-          isPlaying={this.state.isPlaying}
-          currentSong={this.state.currentSong}
-          currentTime={this.audioElement.currentTime}
-          duration={this.audioElement.duration}
-          currentVolume={this.state.currentVolume}
-          volumePercent={this.state.VolumePercent}
-          handleSongClick={() => this.handleSongClick(this.state.currentSong)}
-          handlePrevClick={() => this.handlePrevClick()}
-          handleNextClick={() => this.handleNextClick()}
-          handleTimeChange={e => this.handleTimeChange(e)}
-          handleVolumeChange={e => this.handleVolumeChange(e)}
-          handleFormatTime={e => this.handleFormatTime(e)}
-        />
-      </section>
-    );
+        <PlayerBar isPlaying={this.state.isPlaying} currentSong={this.state.currentSong} currentTime={this.audioElement.currentTime} duration={this.audioElement.duration} currentVolume={this.state.currentVolume} volumePercent={this.state.VolumePercent} handleSongClick={() => this.handleSongClick(this.state.currentSong)} handlePrevClick={() => this.handlePrevClick()} handleNextClick={() => this.handleNextClick()} handleTimeChange={e => this.handleTimeChange(e)} handleVolumeChange={e => this.handleVolumeChange(e)} handleFormatTime={e => this.handleFormatTime(e)} />
+      </section>;
   }
 }
     
